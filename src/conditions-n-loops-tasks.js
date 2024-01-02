@@ -21,8 +21,8 @@
  *  0  => true
  *  -5 => false
  */
-function isPositive(/* number */) {
-  throw new Error('Not implemented');
+function isPositive(number) {
+  return number >= 0;
 }
 
 /**
@@ -213,8 +213,13 @@ function convertNumberToString(numberStr) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  for (let i = 0; i < Math.floor(str.length / 2); i += 1) {
+    if (str[i] !== str[str.length - i - 1]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -320,8 +325,44 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  let rowStart = 0;
+  let rowEnd = size - 1;
+  let colStart = 0;
+  let colEnd = size - 1;
+  let value = 1;
+
+  const resArray = [];
+  const finishValue = size ** 2;
+  for (let i = 0; i < size; i += 1) {
+    resArray[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      resArray[i][j] = 0;
+    }
+  }
+  while (value <= finishValue) {
+    for (let i = colStart; i <= colEnd && value <= finishValue; i += 1) {
+      resArray[rowStart][i] = value;
+      value += 1;
+    }
+    rowStart += 1;
+    for (let i = rowStart; i <= rowEnd && value <= finishValue; i += 1) {
+      resArray[i][colEnd] = value;
+      value += 1;
+    }
+    colEnd -= 1;
+    for (let i = colEnd; i >= colStart && value <= finishValue; i -= 1) {
+      resArray[rowEnd][i] = value;
+      value += 1;
+    }
+    rowEnd -= 1;
+    for (let i = rowEnd; i >= rowStart && value <= finishValue; i -= 1) {
+      resArray[i][colStart] = value;
+      value += 1;
+    }
+    colStart += 1;
+  }
+  return resArray;
 }
 
 /**
@@ -339,8 +380,21 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const len = matrix.length;
+  const res = matrix;
+
+  for (let i = 0; i < len / 2; i += 1) {
+    for (let j = i; j < len - 1 - i; j += 1) {
+      const temp = res[i][j];
+      res[i][j] = res[len - 1 - j][i];
+      res[len - 1 - j][i] = res[len - 1 - i][len - 1 - j];
+      res[len - 1 - i][len - 1 - j] = res[j][len - 1 - i];
+      res[j][len - 1 - i] = temp;
+    }
+  }
+
+  return res;
 }
 
 /**
