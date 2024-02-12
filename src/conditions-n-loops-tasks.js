@@ -411,8 +411,34 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  function recSort(curArr) {
+    if (curArr.length <= 1) return curArr;
+
+    const pivotIndex = Math.floor(curArr.length / 2);
+    const pivotValue = curArr[pivotIndex];
+    const arrPivot = [];
+    const arrLess = [];
+    const arrMore = [];
+
+    for (let i = 0; i < curArr.length; i += 1) {
+      if (curArr[i] === pivotValue) {
+        arrPivot[arrPivot.length] = curArr[i];
+      } else if (curArr[i] < pivotValue) {
+        arrLess[arrLess.length] = curArr[i];
+      } else if (curArr[i] > pivotValue) {
+        arrMore[arrMore.length] = curArr[i];
+      }
+    }
+
+    return [...recSort(arrLess), ...arrPivot, ...recSort(arrMore)];
+  }
+
+  const sortArr = recSort([...arr]);
+  const newArr = arr;
+  for (let i = 0; i < newArr.length; i += 1) {
+    newArr[i] = sortArr[i];
+  }
 }
 
 /**
@@ -432,8 +458,34 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str;
+  let start = '';
+  let end = '';
+  let count = iterations;
+  let loop = 0;
+
+  for (let iteration = 0; iteration < count; iteration += 1) {
+    start = '';
+    end = '';
+    for (let i = 0; i < result.length; i += 1) {
+      if (i % 2 === 0) {
+        start += result[i];
+      } else {
+        end += result[i];
+      }
+    }
+
+    result = start + end;
+    loop += 1;
+
+    if (result === str && count - loop * 2 > 0) {
+      count = (count % loop) + 1;
+      iteration = 0;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -453,8 +505,27 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const arrNumber = [];
+  let num = number;
+
+  for (let i = 0; i < String(number).length; i += 1) {
+    arrNumber.push(String(number)[i]);
+  }
+
+  const sortInitNumber = arrNumber.sort().join('');
+  let numArr = [];
+  let sortCurrentNumber;
+  do {
+    num += 1;
+    numArr = [];
+    for (let i = 0; i < String(num).length; i += 1) {
+      numArr.push(String(num)[i]);
+    }
+    sortCurrentNumber = numArr.sort().join('');
+  } while (sortInitNumber !== sortCurrentNumber);
+
+  return num;
 }
 
 module.exports = {
